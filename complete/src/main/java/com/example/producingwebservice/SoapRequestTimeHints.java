@@ -29,46 +29,6 @@ public class SoapRequestTimeHints implements RuntimeHintsRegistrar {
             hints.reflection().registerType(type, MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS);
         }
 
-
-
-        // TODO Make sure native test fails without this!
-
-        /*
-        Caused by: org.springframework.beans.factory.BeanInitializationException: Could not find default strategy class for interface [org.springframework.ws.WebServiceMessageFactory]
-        at org.springframework.ws.support.DefaultStrategiesHelper.getDefaultStrategies(DefaultStrategiesHelper.java:141) ~[na:na]
-        at org.springframework.ws.support.DefaultStrategiesHelper.getDefaultStrategy(DefaultStrategiesHelper.java:212) ~[na:na]
-        at org.springframework.ws.transport.http.MessageDispatcherServlet.initWebServiceMessageFactory(MessageDispatcherServlet.java:389) ~[com.example.producingwebservice.ProducingWebServiceApplication:na]
-        at org.springframework.ws.transport.http.MessageDispatcherServlet.initMessageReceiverHandlerAdapter(MessageDispatcherServlet.java:377) ~[com.example.producingwebservice.ProducingWebServiceApplication:na]
-        ... 27 common frames omitted
-Caused by: java.lang.ClassNotFoundException: org.springframework.ws.soap.saaj.SaajSoapMessageFactory
-
-         */
-        try {
-            hints.reflection().registerConstructor( org.springframework.ws.soap.saaj.SaajSoapMessageFactory.class.getDeclaredConstructor(), ExecutableMode.INVOKE);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-
-        /*
-        org.springframework.beans.factory.BeanInitializationException: Could not find default strategy class for interface [org.springframework.ws.transport.WebServiceMessageReceiver]
-        at org.springframework.ws.support.DefaultStrategiesHelper.getDefaultStrategies(DefaultStrategiesHelper.java:141) ~[na:na]
-        at org.springframework.ws.support.DefaultStrategiesHelper.getDefaultStrategy(DefaultStrategiesHelper.java:212) ~[na:na]
-        at org.springframework.ws.transport.http.MessageDispatcherServlet.initMessageReceiver(MessageDispatcherServlet.java:433) ~[com.example.producingwebservice.ProducingWebServiceApplication:na]
-        at org.springframework.ws.transport.http.MessageDispatcherServlet.initStrategies(MessageDispatcherServlet.java:364) ~[com.example.producingwebservice.ProducingWebServiceApplication:na]
-        at org.springframework.ws.transport.http.MessageDispatcherServlet.onRefresh(MessageDispatcherServlet.java:296) ~[com.example.producingwebservice.ProducingWebServiceApplication:na]
-        at org.springframework.web.servlet.FrameworkServlet.initWebApplicationContext(FrameworkServlet.java:603) ~[com.example.producingwebservice.ProducingWebServiceApplication:6.1.1]
-
-        This is interesting. onRefresh is only called on the first request!
-         */
-        try {
-            hints.reflection().registerConstructor( org.springframework.ws.soap.server.SoapMessageDispatcher.class.getDeclaredConstructor(), ExecutableMode.INVOKE);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-
-        hints.resources().registerResource(new ClassPathResource("org/springframework/ws/soap/server/SoapMessageDispatcher.properties"));
-
-
         /*
         2024-06-07T09:39:48.319Z DEBUG 1 --- [nio-8080-exec-1] o.s.w.soap.server.SoapMessageDispatcher  : Testing endpoint adapter [org.springframework.ws.server.endpoint.adapter.DefaultMethodEndpointAdapter@3dac81f2]
 2024-06-07T09:39:48.319Z TRACE 1 --- [nio-8080-exec-1] o.s.w.s.e.a.DefaultMethodEndpointAdapter : Testing if argument resolver [org.springframework.ws.server.endpoint.adapter.method.dom.DomPayloadMethodProcessor@4eb8db9a] supports [class io.spring.guides.gs_producing_web_service.GetCountryRequest]
