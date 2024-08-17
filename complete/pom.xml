@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<!--<glassfish-jaxb.version>4.0.6-SNAPSHOT</glassfish-jaxb.version>-->
 	</properties>
 
 	<dependencies>
@@ -46,6 +47,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+				<image>
+					<builder>paketobuildpacks/builder-jammy-tiny:0.0.259</builder>
+					<runImage>paketobuildpacks/run-jammy-tiny:0.2.46</runImage>
+					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+					<env>
+						<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+					</env>
+				</image>
+			</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
 			</plugin>
 			<!-- tag::xsd[] -->
 			<plugin>
