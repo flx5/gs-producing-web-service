@@ -20,37 +20,6 @@ public class SoapRequestTimeHints implements RuntimeHintsRegistrar {
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
 
-        // Required because glassfish does not have hints for these itself yet: https://github.com/eclipse-ee4j/jaxb-ri/pull/1802
-        String[] jaxbProperties = new String[] { "SingleElementLeafProperty", "ArrayElementLeafProperty", "SingleElementNodeProperty",
-        "SingleReferenceNodeProperty", "SingleMapNodeProperty", "ArrayElementNodeProperty", "ArrayReferenceNodeProperty"};
-
-        for (String jaxbProperty : jaxbProperties) {
-            TypeReference type = TypeReference.of("org.glassfish.jaxb.runtime.v2.runtime.property." + jaxbProperty);
-            hints.reflection().registerType(type, MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS);
-        }
-
-        /*
-        2024-06-07T09:39:48.319Z DEBUG 1 --- [nio-8080-exec-1] o.s.w.soap.server.SoapMessageDispatcher  : Testing endpoint adapter [org.springframework.ws.server.endpoint.adapter.DefaultMethodEndpointAdapter@3dac81f2]
-2024-06-07T09:39:48.319Z TRACE 1 --- [nio-8080-exec-1] o.s.w.s.e.a.DefaultMethodEndpointAdapter : Testing if argument resolver [org.springframework.ws.server.endpoint.adapter.method.dom.DomPayloadMethodProcessor@4eb8db9a] supports [class io.spring.guides.gs_producing_web_service.GetCountryRequest]
-2024-06-07T09:39:48.319Z TRACE 1 --- [nio-8080-exec-1] o.s.w.s.e.a.DefaultMethodEndpointAdapter : Testing if argument resolver [org.springframework.ws.server.endpoint.adapter.method.MessageContextMethodArgumentResolver@4f94a109] supports [class io.spring.guides.gs_producing_web_service.GetCountryRequest]
-2024-06-07T09:39:48.319Z TRACE 1 --- [nio-8080-exec-1] o.s.w.s.e.a.DefaultMethodEndpointAdapter : Testing if argument resolver [org.springframework.ws.server.endpoint.adapter.method.SourcePayloadMethodProcessor@7c2dcdce] supports [class io.spring.guides.gs_producing_web_service.GetCountryRequest]
-2024-06-07T09:39:48.319Z TRACE 1 --- [nio-8080-exec-1] o.s.w.s.e.a.DefaultMethodEndpointAdapter : Testing if argument resolver [org.springframework.ws.server.endpoint.adapter.method.XPathParamMethodArgumentResolver@154e0f59] supports [class io.spring.guides.gs_producing_web_service.GetCountryRequest]
-2024-06-07T09:39:48.319Z TRACE 1 --- [nio-8080-exec-1] o.s.w.s.e.a.DefaultMethodEndpointAdapter : Testing if argument resolver [org.springframework.ws.server.endpoint.adapter.method.StaxPayloadMethodArgumentResolver@2e594b7d] supports [class io.spring.guides.gs_producing_web_service.GetCountryRequest]
-2024-06-07T09:39:48.319Z DEBUG 1 --- [nio-8080-exec-1] s.e.SoapFaultAnnotationExceptionResolver : Resolving exception from endpoint [public io.spring.guides.gs_producing_web_service.GetCountryResponse com.example.producingwebservice.
-         */
-
-        // Ohne Native: XmlRootElementPayloadMethodProcessor
-        // Aus DefaultMethodEndpointAdapter in Resolvers INit:
-        /*
-        			if (isPresent(JAXB2_CLASS_NAME)) {
-				methodArgumentResolvers.add(new XmlRootElementPayloadMethodProcessor());
-				methodArgumentResolvers.add(new JaxbElementPayloadMethodProcessor());
-			}
-         */
-
-        // TODO Validate category
-        hints.reflection().registerType(jakarta.xml.bind.Binder.class, MemberCategory.DECLARED_CLASSES);
-
         // TODO Register generated Classes for reflection (ctor call)
         for (var clazz : List.of(GetCountryRequest.class, GetCountryResponse.class, Country.class)) {
             try {
