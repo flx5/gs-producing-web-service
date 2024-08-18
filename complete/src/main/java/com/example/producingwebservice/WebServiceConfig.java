@@ -15,7 +15,7 @@ import org.springframework.xml.xsd.XsdSchema;
 
 @EnableWs
 @Configuration
-@ImportRuntimeHints({SoapStartupRuntimeHints.class, SoapRequestTimeHints.class})
+@ImportRuntimeHints({SoapStartupRuntimeHints.class})
 public class WebServiceConfig extends WsConfigurerAdapter {
 	@Bean
 	public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
